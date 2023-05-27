@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comment.vo">
+    <!--댓글 리스트 불러오기, 추가, 수정, 삭제-->
+        <!--댓글 불러오기-->
+        <select id="selectCommentList" resultType="com.example.comment.vo.CommentListVO" parameterType="java.util.HashMap">
+            SELECT
+                COMMENTNO,
+                BOARDNO,
+                BLOCKNO,
+                PARENTNO,
+                WRITER,
+                CONTENTS,
+                WRITEDATE
+            FROM COMMENTLIST
+            ORDER BY WRITEDATE DESC
+        </select>
+        <!--댓글 추가하기-->
+        <insert id="insertComment" parameterType="com.example.comment.vo.CommentListVO">
+            INSERT INTO COMMENTLIST(CONTENTS)
+            VALUES (#{contents})
+        </insert>
+        <!--댓글 수정하기-->
+        <update id="updateComment" parameterType="map">
+            UPDATE COMMENTLIST
+            SET CONTENTS = #{comments}
+            WHERE COMMENTNO = #{commentno}
+        </update>
+        <!--댓글 삭제하기-->
+        <delete id="deleteComment" parameterType="com.example.comment.vo.CommentListVO">
+            DELETE FROM
+                COMMENTLIST
+            WHERE COMMENTNO=#{commentno}
+        </delete>
+    <!--답글 리스트 불러오기, 추가, 수정, 삭제-->
+        <!--답글 추가-->
+        <insert id="insertReplyComment" parameterType="map">
+            INSERT INTO COMMENTLIST(PARENTNO, CONTENTS)
+            VALUES (#{parentno},#{contents})
+        </insert>
+</mapper>

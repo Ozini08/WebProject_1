@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.board.vo">
+    <select id="selectAll" parameterType="java.util.HashMap" resultType="com.example.board.vo.BoardListVO">
+        select *
+        from(
+        select @rownum:=@rownum+1 rownumber,BOARDLIST.*
+        from BOARDLIST
+        where (@rownum:=0)=0
+        <if test="query !=null "> AND ${query} LIKE CONCAT('%',#{data},'%')</if>
+        order by boardno desc)a
+        where rownumber between #{start} and #{end}
+    </select>
+    <insert id="insertBoard" parameterType="com.example.board.vo.BoardListVO">
+        INSERT INTO BOARDLIST(CATEGORY, TITLE, WRITER, BOARDCONTENT, PASSWORD)
+        VALUES (#{category},#{title},#{writer},#{boardcontent},#{password})
+    </insert>
+    <select id="totalCount" resultType="int" parameterType="java.util.HashMap">
+        select count(*) from BOARDLIST
+        <choose>
+            <when test="query != null and data != null">
+                <where>
+                    ${query} LIKE CONCAT('%', #{data}, '%')
+                </where>
+            </when>
+        </choose>
+    </select>
+    <select id="selectInfo" parameterType="int" resultType="com.example.board.vo.BoardListVO">
+        SELECT *
+        FROM BOARDLIST
+        WHERE BOARDNO=(#{boardno})
+    </select>
+    <update id="updateBoard" parameterType="com.example.board.vo.BoardListVO">
+        UPDATE BOARDLIST
+        SET CATEGORY=#{category},
+            TITLE=#{title},
+            WRITER=#{writer},
+            BOARDCONTENT=#{boardcontent},
+            PASSWORD=#{password}
+        WHERE BOARDNO=#{boardno}
+    </update>
+    <update id="updateHit" parameterType="java.lang.Integer">
+        UPDATE BOARDLIST SET HIT=HIT+1
+        WHERE BOARDNO=#{VALUE}
+    </update>
+    <update id="updateGood" parameterType="java.util.HashMap">
+        UPDATE BOARDLIST SET ${data}=${data}+1
+        WHERE BOARDNO=#{boardno}
+    </update>
+    <delete id="deleteBoard" parameterType="java.lang.Integer">
+        DELETE FROM BOARDLIST
+        WHERE BOARDNO=#{boardno}
+    </delete>
+    <!-- good or bad 둘중 한개 -->
+<!--    BOARDNO-->
+<!--    CATEGORY-->
+<!--    TITLE-->
+<!--    WRITER-->
+<!--    WRITEDATE-->
+<!--    COMMENTS-->
+<!--    BOARDCONTENT-->
+<!--    good-->
+<!--    bad-->
+<!--    PASSWORD-->
+<!--    FILE-->
+</mapper>

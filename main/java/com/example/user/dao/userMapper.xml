@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.user.vo">
+    <select id="getIdCheck" parameterType="java.lang.String" resultType="java.lang.String"> -- parameterType="java.lang.String"
+    SELECT PASSWORD FROM USERLIST
+    WHERE ID=#{id}
+    </select>
+    <insert id="insertUser" parameterType="com.example.user.vo.UserListVO">
+        INSERT INTO USERLIST(ID, PASSWORD, NAME)
+        VALUES (#{id}, #{password}, #{name})
+    </insert>
+</mapper>

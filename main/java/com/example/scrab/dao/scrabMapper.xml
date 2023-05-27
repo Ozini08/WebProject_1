@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.scrab.vo">
+    <select id="ScrabSel" parameterType="int" resultType="scrab">
+        SELECT *
+        FROM SCRABLIST
+        ORDER BY WRITEDATE DESC
+    </select>
+    <delete id="ScrabDel">
+        DELETE FROM SCRABLIST
+        WHERE SCRABNO=${scrabno}
+    </delete>
+    <insert id="ScrabAdd" parameterType="scrab">
+        INSERT INTO SCRABLIST(BOARDNO,
+                              CATEGORY,
+                              TITLE,
+                              WRITER,
+                              COMMENTS,
+                              HIT,
+                              WRITEDATE)
+        VALUES (#{boardno},#{category},#{title},#{writer},${comments},${hit},#{writedate})
+    </insert>
+</mapper>
